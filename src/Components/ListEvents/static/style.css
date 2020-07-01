@@ -1,0 +1,13 @@
+.conainer_filter{
+    display: flex;
+    justify-content: center;
+}
+table.tableListEvent {
+    border-collapse: collapse;
+}
+
+table.tableListEvent tr td {
+    border: 1px solid #eee;
+    padding: 0px;
+    margin: 0px;
+}
