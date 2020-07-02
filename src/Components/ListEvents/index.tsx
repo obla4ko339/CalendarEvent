@@ -1,12 +1,14 @@
 import React, { FormHTMLAttributes } from 'react';
 import ApiRequest from './apiRequest'
 import RenderListEvent from './RenderListEvent'
+import Hte_select from './Form/Select'
 import './static/style.css'
 
 interface ListEventsINTERFACE {
     listEvent:any,
     dateStart:any,
-    dateEnd:any 
+    dateEnd:any,
+    listBuild:any 
     
 
 }
@@ -14,55 +16,63 @@ interface ListEventsINTERFACE {
 export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
     
     requestUrl:Object
+    startDate:string
+    endDate:string
+    
 
     constructor(props:ListEventsINTERFACE){ 
         super(props)
-        this.state = {listEvent:null, dateStart:null, dateEnd:null}
+        this.state = {listEvent:null, dateStart:null, dateEnd:null, listBuild:null}
         this.renderApi = this.renderApi.bind(this)
+        this.fetchApi = this.fetchApi.bind(this)
         this.requestUrl = {}
-        // let apiObject = new ApiRequest("http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=allData", "", this.renderApi )
+        this.startDate = ""
+        this.endDate = ""
+
         // let apiObject = new ApiRequest("http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=allData&dateStart=%222020-06-30%22&dateEnd=%222020-07-08%2015:00:00%22&build=121", "", this.renderApi )
         // apiObject.fethJSON()
         console.log("constructor")
     }
 
     componentDidMount(){
-        let apiObject = new ApiRequest("http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=allData", "", this.renderApi )
-        // let apiObject = new ApiRequest("http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=allData&dateStart=%222020-06-30%22&dateEnd=%222020-07-08%2015:00:00%22&build=121", "", this.renderApi )
-        apiObject.fethJSON()
+        this.fetchApi()
     }
 
 
-    componentWillUpdate(){
-        console.log("componentWillUpdate")
+
+    fetchApi(dateS:any = null, dateE:any = null){
         let urlString = "http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=allData"
-        if(this.state.dateStart){
-            urlString += `&dateStart=${this.state.dateStart}`
+        if(dateS){
+            urlString += `&dateStart='${dateS}'`
         }
-        if(this.state.dateEnd){
-            urlString += `&dateEnd=${this.state.dateStart}`
+        if(dateE){
+            urlString += `&dateEnd='${dateE}'`
         }
-        // let apiObject = new ApiRequest(urlString, "",this.renderApi)
-        // apiObject.fethJSON()
+        let apiObject = new ApiRequest(urlString, "",this.renderApi)
+        apiObject.fethJSON()
         console.log(urlString)
     }
 
-    renderApi(data:any){
-        this.setState({listEvent:data})
-    }
-
-    startDate(e:any){
-        // let nameField = e.currentTarget.dataset.datefield
-        let valueField = e.currentTarget.value
-        this.setState({"dateStart":valueField})
-    }
-
-    endDate(e:any){
-        let valueField = e.currentTarget.value
-        this.setState({"dateEnd":valueField})
-    }
+    
 
     
+
+    startDates(e:any){
+        let nameField = e.currentTarget.dataset.datefield
+        if(nameField === "dateStart"){
+            this.startDate = e.currentTarget.value
+        }
+        if(nameField === "dateEnd"){
+            this.endDate = e.currentTarget.value
+        }
+        this.fetchApi(this.startDate,this.endDate )
+    }
+
+  
+    renderApi(data:any){
+        this.setState({listEvent:data})
+        console.log("renderApi")
+    }
     
 
     render(){
@@ -74,19 +84,13 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
                     <form action="">
                         <div className="conainer_filter">
                             <div>
-                               <input type="date" name="" id="" data-datefield="dateStart" onChange={(e)=>this.startDate(e)}/>
+                               <input type="date" name="" id="" data-datefield="dateStart" onChange={(e)=>this.startDates(e)}/>
                             </div>
                             <div>
-                               <input type="date" name="" id="" data-datefield="dateEnd" onChange={(e)=>this.endDate(e)}/>
+                               <input type="date" name="" id="" data-datefield="dateEnd" onChange={(e)=>this.startDates(e)}/>
                             </div>
                             <div>
-                                <select name="" id="">
-                                    <option value="">1</option>
-                                    <option value="">1</option>
-                                    <option value="">1</option>
-                                    <option value="">1</option>
-                                    <option value="">1</option>
-                                </select>
+                                <Hte_select listBuild={} />
                             </div>
                         </div>
 
