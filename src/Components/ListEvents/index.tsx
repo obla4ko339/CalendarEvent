@@ -8,7 +8,8 @@ interface ListEventsINTERFACE {
     listEvent:any,
     dateStart:any,
     dateEnd:any,
-    listBuild:any 
+    listBuild:any,
+    listBild:any
     
 
 }
@@ -22,8 +23,9 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
 
     constructor(props:ListEventsINTERFACE){ 
         super(props)
-        this.state = {listEvent:null, dateStart:null, dateEnd:null, listBuild:null}
+        this.state = {listEvent:null, dateStart:null, dateEnd:null, listBuild:null, listBild:null}
         this.renderApi = this.renderApi.bind(this)
+        this.renderBuildListApi = this.renderBuildListApi.bind(this)
         this.fetchApi = this.fetchApi.bind(this)
         this.requestUrl = {}
         this.startDate = ""
@@ -36,8 +38,20 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
 
     componentDidMount(){
         this.fetchApi()
+        this.fetchApiSelectBuild()
     }
 
+    /* Получение списка учреждений*/
+    fetchApiSelectBuild(){
+        let urlString = "http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=listBuild"
+        let apiObject = new ApiRequest(urlString, "",this.renderBuildListApi)
+        apiObject.fethJSON()
+    }
+    renderBuildListApi(data:any){
+        this.setState({listBild:data})
+        console.log("renderApi")
+    }
+    /* Получение списка учреждений*/
 
 
     fetchApi(dateS:any = null, dateE:any = null){
@@ -90,7 +104,7 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
                                <input type="date" name="" id="" data-datefield="dateEnd" onChange={(e)=>this.startDates(e)}/>
                             </div>
                             <div>
-                                <Hte_select listBuild={} />
+                                <Hte_select listBuild={this.state.listBild} />
                             </div>
                         </div>
 
