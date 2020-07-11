@@ -22,8 +22,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
 
            return(
                <div className="container_Event_list">
-                   <div></div>
-                   {console.log(this.props.list)}
+                   
                    <div>
                        <table className="tableListEvent wp-list-table widefat  striped users"  >
                        <thead>
@@ -48,6 +47,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
                             
                             </tr>
                        )}
+                       {this.props.list.length < 1 ? "Данных нет" : ""}
                        </table>
                    </div>
                </div>
