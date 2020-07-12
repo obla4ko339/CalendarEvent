@@ -42,3 +42,73 @@ table.tableListEvent tr td {
 .iconevent {
     cursor: pointer;
 }
+
+/*tree*/
+.treeCSS .drop {
+    left: -.5em;
+    top: .4em;
+    width: .9em;
+    height: .9em;
+    line-height: .9em;
+    text-align: center;
+    font-size: 20px;
+    cursor: pointer;
+    display: inline-block;
+    font-weight: bold;
+}
+.treeCSS li:last-child > .drop {
+  margin-left: 1px;
+}
+.treeCSS .drop ~ ul  {
+  display: none;  
+}
+.treeCSS .dropM ~ ul   {
+  display: block;
+}
+.treeCSS .dropM ~ ul li {
+    padding: 4px 15px;
+}
+
+
+
+.treeCSS, 
+.treeCSS ul,
+.treeCSS li {
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+  list-style: none;
+}
+.treeCSS ul {
+  margin: 0 0 0 .5em; 
+}
+.treeCSS > li:not(:only-child),
+.treeCSS li li {
+  position: relative;
+  padding: .2em 0 10px 1.2em; 
+}
+.treeCSS li:not(:last-child) {
+}
+.treeCSS li li:before,
+.treeCSS > li:not(:only-child):before { 
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0.7em; 
+  height: 1.1em;
+  border-bottom: 1px solid #ccc;
+}
+.treeCSS li:last-child:before { 
+  width: calc(1.1em - 1px); 
+  border-left: 1px solid #ccc;
+}
+.icon_img {
+    width: 16px;
+    cursor: pointer;
+    margin: 0px 5px;
+}
+.container_tree_build {
+}
+ul.treeCSS li:nth-child(even) {
+}
