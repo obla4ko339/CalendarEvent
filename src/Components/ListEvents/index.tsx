@@ -81,8 +81,13 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
     }
 
     xe=(e:any)=>{
+        console.log(e.currentTarget.dataset.datefield)
+        let valueFotGet = e.currentTarget.value
+        if (e.currentTarget.dataset.datefield == "buildID"){
+            valueFotGet = e.currentTarget.dataset.idbuild
+        }
         this.objParamsFilter = {
-                ...this.objParamsFilter, ...{[e.currentTarget.dataset.datefield]:e.currentTarget.value}
+                ...this.objParamsFilter, ...{[e.currentTarget.dataset.datefield]:valueFotGet}
             }
         this.fetchApi(this.objParamsFilter)
     }
@@ -92,7 +97,7 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
         return(
             <div className="container_listEvents">
             <div>
-                <ListBuild arrayListBuild={[this.state.listBild]} />
+                <ListBuild arrayListBuild={[this.state.listBild]} getIdBuild={this.xe} />
             </div>
                 <div>
                     <form action="">

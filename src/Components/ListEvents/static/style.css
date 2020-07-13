@@ -43,6 +43,8 @@ table.tableListEvent tr td {
     cursor: pointer;
 }
 
+
+
 /*tree*/
 .treeCSS .drop {
     left: -.5em;
@@ -111,4 +113,15 @@ table.tableListEvent tr td {
 .container_tree_build {
 }
 ul.treeCSS li:nth-child(even) {
+}
+
+
+
+/*justify block*/
+
+.container_listEvents {
+  display: flex;
+}
+.container_listEvents > div {
+  width: 40%;
 }
