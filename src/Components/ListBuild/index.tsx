@@ -4,7 +4,8 @@ import { isArray } from 'util';
 
 interface PropsListBuild{
     arrayListBuild:Array<any>,
-    getIdBuild:any
+    getIdBuild:any,
+    currentUser:{currentuser:""}
 }
 
 export default class ListBuild extends React.Component<PropsListBuild, {}>{
@@ -16,20 +17,20 @@ export default class ListBuild extends React.Component<PropsListBuild, {}>{
         this.build_tree = this.build_tree.bind(this)
     }
 
+
+
     componentDidUpdate=()=>{
         
         let ul = document.querySelectorAll('.treeCSS > li:not(:only-child) ul, .treeCSS ul ul');
         
         for (let i = 0; i < ul.length; i++) {
+
             let div = document.createElement('div');
-            
             div.className = 'drop';
             div.innerHTML = '+'; // картинки лучше выравниваются, т.к. символы на одном браузере ровно выглядят, на другом — чуть съезжают 
+            ul[i].parentNode?.querySelector(".drop")?.remove()
             ul[i].parentNode?.insertBefore(div, ul[i].previousSibling);
-            
-            
             div.onclick = function() {
-                
                 div.innerHTML = (div.innerHTML === "+" ? "−" : "+");
                 div.className = (div.className === 'drop' ? 'drop dropM' : 'drop');
             }
@@ -87,7 +88,7 @@ export default class ListBuild extends React.Component<PropsListBuild, {}>{
             <div>
                 <div></div>
                 
-                {this.build_tree_Recurs(this.props.arrayListBuild[0], 0)}
+                {this.build_tree_Recurs(this.props.arrayListBuild[0], this.props.currentUser.currentuser)}
             </div>
         )
     }

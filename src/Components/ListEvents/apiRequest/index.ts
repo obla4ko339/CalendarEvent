@@ -20,9 +20,14 @@ export default class ApiRequest{
         }
     }
 
+    //get
+    fethJSONget(){
+        fetch(this.apiURL, {
+            method:"get",
+        })
+    }
 
-
-
+    //post
     fethJSON(){
         fetch(this.apiURL, {
             method:"post",

@@ -125,3 +125,14 @@ ul.treeCSS li:nth-child(even) {
 .container_listEvents > div {
   width: 40%;
 }
+span#title_build {
+  cursor: pointer;
+}
+
+.isTurnTrue{
+  color:green ;
+}
+
+.isTurnFalse{
+  color:red ;
+}

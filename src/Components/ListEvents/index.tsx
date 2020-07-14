@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { FormHTMLAttributes } from 'react';
 import ApiRequest from './apiRequest'
 import RenderListEvent from './RenderListEvent'
 import HteSelect from './Form/Select'
 import ListBuild from '../ListBuild'
 import './static/style.css'
+import { FormatInputPathObject } from 'path';
 
 interface ListEventsINTERFACE {
     listEvent:any,
@@ -12,7 +13,8 @@ interface ListEventsINTERFACE {
     listBuild:any,
     listBild:any,
     buildId_event:string,
-    listBuildArray:Array<any>
+    listBuildArray:Array<any>,
+    getUserId:any
 }
 
 
@@ -30,7 +32,7 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
 
     constructor(props:ListEventsINTERFACE){ 
         super(props)
-        this.state = {listEvent:null, dateStart:null, dateEnd:null, listBuild:null, listBild:null,buildId_event:"", listBuildArray:[] }
+        this.state = {listEvent:null, dateStart:null, dateEnd:null, listBuild:null, listBild:null,buildId_event:"", listBuildArray:[], getUserId:0 }
         this.renderApi = this.renderApi.bind(this)
         this.renderBuildListApi = this.renderBuildListApi.bind(this)
         this.fetchApi = this.fetchApi.bind(this)
@@ -45,6 +47,7 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
     componentDidMount(){
         this.fetchApi()
         this.fetchApiSelectBuild()
+        this.FetchGetUserId()
     }
 
    
@@ -91,22 +94,42 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
             }
         this.fetchApi(this.objParamsFilter)
     }
+
+    getDateStart=()=>{
+        let dateNow = new Date()
+        console.log(dateNow.getFullYear()+"-0"+dateNow.getMonth()+"-0"+dateNow.getDay())
+        return dateNow.getFullYear()+"-0"+dateNow.getMonth()+"-0"+dateNow.getDay()
+    }
+
+    //Получение iD польхователя для отрисовки дерева учреждений
+    FetchGetUserId=()=>{
+        let urlString = "http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=getUserId"
+        console.log(urlString)
+        let apiObject = new ApiRequest(urlString, "",this.GetUserId)
+        apiObject.fethJSON()
+    }
+
+    GetUserId=(data:any)=>{
+        this.setState({getUserId:data})
+        console.log(this.state.getUserId)
+    }
+    //Получение iD польхователя для отрисовки дерева учреждений
     
 
     render(){
         return(
             <div className="container_listEvents">
             <div>
-                <ListBuild arrayListBuild={[this.state.listBild]} getIdBuild={this.xe} />
+                <ListBuild arrayListBuild={[this.state.listBild]} getIdBuild={this.xe} currentUser={this.state.getUserId} />
             </div>
                 <div>
                     <form action="">
                         <div className="conainer_filter">
                             <div>
-                               <input type="date" name="" id="" data-datefield="dateStart" onChange={(e)=>this.xe(e)}/>
+                               <input type="date" name="" id="dateStart" data-datefield="dateStart"  onChange={(e)=>this.xe(e)}/>
                             </div>
                             <div>
-                               <input type="date" name="" id="" data-datefield="dateEnd" onChange={(e)=>this.xe(e)}/>
+                               <input type="date" name="" id="dateEnd" data-datefield="dateEnd" onChange={(e)=>this.xe(e)}/>
                             </div>
                             
                         </div>
