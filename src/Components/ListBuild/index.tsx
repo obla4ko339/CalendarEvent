@@ -37,6 +37,19 @@ export default class ListBuild extends React.Component<PropsListBuild, {}>{
         }
     } 
 
+    handlerBuild=(e:any)=>{
+
+        let ul = document.querySelectorAll('.treeCSS .build_name');
+
+        for (let i = 0; i < ul.length; i++) {
+            ul[i].classList.remove("active")
+        }
+
+        console.log(e.currentTarget.classList.add("active"))
+
+        this.props.getIdBuild(e)
+    }
+
 
 
     build_tree_Recurs=(arrayList:any, parent_id:any)=>{
@@ -47,7 +60,7 @@ export default class ListBuild extends React.Component<PropsListBuild, {}>{
                    (typeof(arrayList[parent_id]) !== "undefined" && arrayList[parent_id] != null) ?
                        <ul  className='treeCSS'>
                        {arrayList[parent_id].map((val:any, index:number)=>(
-                               <li><span className='build_name' data-idbuild={val.build_ID} data-idparent={val.build_PARENT_ID} data-datefield="buildID" onClick={(e)=>{return this.props.getIdBuild(e)}}><span id='title_build'>{val.build_name}</span></span>
+                               <li><span className='build_name' data-idbuild={val.build_ID} data-idparent={val.build_PARENT_ID} data-datefield="buildID" onClick={(e)=>{return this.handlerBuild(e)}}><span id='title_build'>{val.build_name}</span></span>
                                {this.build_tree_Recurs(arrayList, parseInt(val.build_ID)) }
                                </li>
                        ))}

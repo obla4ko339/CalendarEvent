@@ -23,14 +23,14 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
     productionEvent(data:any){
         
         let trNode = data.currentTarget.parentNode.parentNode
+        //уникальный ключ события
         let listId = trNode.dataset.listid
+        //уникальный ключ учреждения
         let listbuild = trNode.dataset.listbuild
+        //значение 1 означеь событие включаено - изначальнро оно включается
         let isturnon = 1
+        
         this.dateMonthNode = document.getElementById("dateStart")
-        if(this.dateMonthNode.value === ""){
-            alert("Выберите дату")
-            return false
-        }
         let cssturnOn = data.currentTarget
         if(cssturnOn.classList.contains("isTurnFalse")){
             cssturnOn.classList.remove("isTurnFalse")
@@ -39,10 +39,14 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
             cssturnOn.classList.add("isTurnFalse")
             cssturnOn.classList.remove("isTurnTrue")
         }
-        let dateMonth = this.dateMonthNode.value.split("-")[1]
-        let dateDay = this.dateMonthNode.value.split("-")[2]
-        let dateYear = this.dateMonthNode.value.split("-")[0]
-        let dateFull = this.dateMonthNode.value
+        let splitDate = trNode.dataset.startevent.split(" ")
+        let dateMonth = splitDate[0].split("-")[1]
+        let dateDay = splitDate[0].split("-")[2]
+        let dateYear = splitDate[0].split("-")[0]
+        let dateFull = splitDate[0]
+
+
+
 
         const infoTurnOnEvent = {
             "turnon_event_id":listId,
@@ -53,7 +57,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
             "turnon_year":dateYear,
             "turnon_date_all":dateFull
         }
-        
+        // console.log(infoTurnOnEvent)
         this.fetchRequestTurnEvent(infoTurnOnEvent)
     }
 
@@ -74,11 +78,8 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
        render(){
         if(!this.props.list) return false
 
-        if(this.state.loading){
-            return (
-                <div> Идет загрузка...</div>
-            )
-        }
+        if(this.state.loading)  return  ( <div> Идет загрузка...</div>)
+        
 
            return(
                <div className="container_Event_list">
@@ -92,16 +93,18 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
                             <th>Дата начала</th>
                             <th>Дата Окончания</th>
                             <th>Описание</th>
+                            <th>Учреждение</th>
                         </tr>
                        </thead>
                        <tbody>
                        {this.props.list.map((v:any, index:any)=>
-                       <tr key={index} data-listID={v.list_ID} data-listBuild={v.list_build} className="containerListEvents">
+                       <tr key={index} data-listID={v.list_ID} data-listBuild={v.list_build} data-startEvent={v.list_datetime_start} className="containerListEvents">
                             <td>{index+1}</td>
                             <td >{v.list_title}</td>
                             <td >{v.list_datetime_start}</td>
                             <td >{v.list_datetime_end   }</td>
                             <td >{v.list_desc}</td>
+                            <td >{v.build_name}</td>
                             <td><span className="material-icons iconevent list_build_edit">create</span></td>
                             <td><span className="material-icons iconevent list_build_delete">delete_forever</span></td>
                             <td><span className={v.turnon_is == 1 ? "material-icons iconevent list_build_production isTurnTrue" : "material-icons iconevent list_build_production isTurnFalse"} onClick={(e)=>this.productionEvent(e)}>thumb_up</span></td>
