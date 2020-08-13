@@ -59,6 +59,14 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
         }
         // console.log(infoTurnOnEvent)
         this.fetchRequestTurnEvent(infoTurnOnEvent)
+
+
+
+    }
+
+    fetchDBMobile(){
+        let urlString = "http://kultura-to.ru/requestcalendar.php"
+        
     }
 
     fetchRequestTurnEvent=(data:any)=>{
