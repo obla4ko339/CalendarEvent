@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactHTMLElement } from 'react';
 import ApiRequest from '../apiRequest'
 
 interface renderListEventINTERFACE{
@@ -64,10 +64,53 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
 
     }
 
-    fetchDBMobile(){
-        let urlString = "http://kultura-to.ru/requestcalendar.php"
+    handlePhone(data:any){
+        let trNode = data.currentTarget.parentNode.parentNode
+        //уникальный ключ события
+        let listId = trNode.dataset.listid
+        //уникальный ключ учреждения
+        let listbuild = trNode.dataset.listbuild
+        //значение 1 означеь событие включаено - изначальнро оно включается
+        let isturnon = 1
+
+        // получить выбранное мероприятие 
+        
+
+
+        this.fetchRequestGetEventForMobile(listId)
+        
+        
+        
+
+
+    }
+
+    //request for MOBILE
+    fetchRequestGetEventForMobile=(listid:any)=>{
+        
+        let urlString = "http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=geteventfoid&idevent="+listid
+        let apiObject = new ApiRequest(urlString, "",(data:any)=>{
+            this.fetchDBMobile(data)
+        })
+        apiObject.fethJSON()
+       
         
     }
+
+
+
+
+
+    fetchDBMobile=(data:any)=>{
+        let urlString = "http://kultura-to.ru/requestcalendar.php?action=putevent&listevent="+JSON.stringify(data[0])
+        console.log(data[0])
+        for(let val in data[0]){
+            urlString += `&${val}=${data[val]}`
+        }
+        console.log(urlString)
+    }
+
+
 
     fetchRequestTurnEvent=(data:any)=>{
         let urlString = "http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=eventturnon"
@@ -116,7 +159,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
                             <td><span className="material-icons iconevent list_build_edit">create</span></td>
                             <td><span className="material-icons iconevent list_build_delete">delete_forever</span></td>
                             <td><span className={v.turnon_is == 1 ? "material-icons iconevent list_build_production isTurnTrue" : "material-icons iconevent list_build_production isTurnFalse"} onClick={(e)=>this.productionEvent(e)}>thumb_up</span></td>
-                            
+                            <td><span className="material-icons  list_build_production iconevent is_phone_api" onClick={(e)=>this.handlePhone(e)}>phone_iphone</span></td>
                             </tr>
                        )}
                        {this.props.list.length < 1 ? "Данных нет" : ""}
