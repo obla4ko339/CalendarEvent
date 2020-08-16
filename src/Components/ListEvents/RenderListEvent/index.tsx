@@ -85,6 +85,27 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
 
     }
 
+
+    deleteEvent=(data:any)=>{
+        let trNode = data.currentTarget.parentNode.parentNode
+        //уникальный ключ события
+        let listId = trNode.dataset.listid
+        //уникальный ключ учреждения
+        let listbuild = trNode.dataset.listbuild
+        //значение 1 означеь событие включаено - изначальнро оно включается
+        let isturnon = 1
+
+        const is_delete = window.confirm("Удалить мероприятие?")
+        if(is_delete){
+            
+            let urlString = "http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=isdelteevent&isdelte="+data.currentTarget.parentNode.parentNode.dataset.listid
+            let apiObject = new ApiRequest(urlString, "",(data:any)=>{
+                this.fetchDBMobile(data)
+            })
+            apiObject.fethJSONget()
+        }
+    }
+
     //request for MOBILE
     fetchRequestGetEventForMobile=(listid:any)=>{
         
@@ -100,14 +121,35 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
   
 
 
-
+    // request MOBILE
     fetchDBMobile=(data:any)=>{
-        let urlString = "http://kultura-to.ru/requestcalendar.php?action=putevent&listevent="+JSON.stringify(data[0])
-        console.log(data[0])
+        let urlString = "http://cors-anywhere.herokuapp.com/http://kultura-to.ru/requestcalendar.php?action=putevent&listevent="
         for(let val in data[0]){
-            urlString += `&${val}=${data[val]}`
+            urlString += `&${val}="${data[0][val]}"`
         }
-        console.log(urlString)
+
+        let apiObject = new ApiRequest(urlString, "",(result:any)=>{
+            console.log(result.res)
+            if(result.res == 0){
+                
+                const is_delete = window.confirm("Мероприятие уже существует. Хотите удалить его ?")
+                if(is_delete){
+                    alert("Мероприятие удалено") 
+                    this.fetchDelete(parseInt(data[0]['list_ID']))
+                }
+            }else{
+                alert("Мероприятие добавлено")
+            }
+            this.fetchDBMobile(result)
+        }) 
+        apiObject.fethJSON()
+    }
+    // Delte event MOBILE
+    fetchDelete=(data:number)=>{
+        alert("Simple")
+        let urlString = "http://kultura-to.ru/requestcalendar.php?action=eventdelete&id_event="+data
+        let apiObject = new ApiRequest(urlString, "",()=>{}) 
+        apiObject.fethJSON()
     }
 
 
@@ -157,7 +199,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
                             <td >{v.list_desc}</td>
                             <td >{v.build_name}</td>
                             <td><span className="material-icons iconevent list_build_edit">create</span></td>
-                            <td><span className="material-icons iconevent list_build_delete">delete_forever</span></td>
+                            <td><span className="material-icons iconevent list_build_delete" onClick={(e)=>this.deleteEvent(e)}>delete_forever</span></td>
                             <td><span className={v.turnon_is == 1 ? "material-icons iconevent list_build_production isTurnTrue" : "material-icons iconevent list_build_production isTurnFalse"} onClick={(e)=>this.productionEvent(e)}>thumb_up</span></td>
                             <td><span className="material-icons  list_build_production iconevent is_phone_api" onClick={(e)=>this.handlePhone(e)}>phone_iphone</span></td>
                             </tr>
