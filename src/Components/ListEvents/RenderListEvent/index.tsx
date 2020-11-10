@@ -1,5 +1,6 @@
 import React, { ReactHTMLElement } from 'react';
 import ApiRequest from '../apiRequest'
+import Pagination from '../pagination'
 
 interface renderListEventINTERFACE{
     list:any
@@ -57,7 +58,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
             "turnon_year":dateYear,
             "turnon_date_all":dateFull
         }
-        // console.log(infoTurnOnEvent)
+        console.log(infoTurnOnEvent)
         this.fetchRequestTurnEvent(infoTurnOnEvent)
 
 
@@ -205,9 +206,16 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
                             </tr>
                        )}
                        {this.props.list.length < 1 ? "Данных нет" : ""}
+                        
                        </tbody>
                        </table>
+                      <div>
+                      <Pagination listPage={this.props.list} />
+                      </div>
                    </div>
+                        
+                            
+                       
                </div>
            )
        } 

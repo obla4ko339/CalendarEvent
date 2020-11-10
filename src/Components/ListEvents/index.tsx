@@ -72,7 +72,7 @@ export default class ListEvents extends React.Component<{},ListEventsINTERFACE>{
         }
         let apiObject = new ApiRequest(urlString, "",this.renderApi)
         apiObject.fethJSON()
-        console.log(urlString)
+        
     }
 
     
