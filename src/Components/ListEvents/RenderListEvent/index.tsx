@@ -1,6 +1,7 @@
 import React, { ReactHTMLElement } from 'react';
 import ApiRequest from '../apiRequest'
 import Pagination from '../pagination'
+import Multiselectbtn from '../multiselectbtn'
 
 interface renderListEventINTERFACE{
     list:any
@@ -203,6 +204,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
                             <td><span className="material-icons iconevent list_build_delete" onClick={(e)=>this.deleteEvent(e)}>delete_forever</span></td>
                             <td><span className={v.turnon_is == 1 ? "material-icons iconevent list_build_production isTurnTrue" : "material-icons iconevent list_build_production isTurnFalse"} onClick={(e)=>this.productionEvent(e)}>thumb_up</span></td>
                             <td><span className="material-icons  list_build_production iconevent is_phone_api" onClick={(e)=>this.handlePhone(e)}>phone_iphone</span></td>
+                            <td><Multiselectbtn /></td> 
                             </tr>
                        )}
                        {this.props.list.length < 1 ? "Данных нет" : ""}
