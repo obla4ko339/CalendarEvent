@@ -8,17 +8,20 @@ interface renderListEventINTERFACE{
 }
 
 interface StateRenderListEventINTERFACE{
-    loading:boolean
+    loading:boolean,
+    listBtnEvent:[],
+    dopParametr:[]
 }
 
 export default class RenderListEvent extends React.Component<renderListEventINTERFACE, StateRenderListEventINTERFACE>{
 
     dateMonthNode:any
+    resBTN:Array<any> 
 
     constructor(props:renderListEventINTERFACE){
         super(props)
-        this.state = {loading:true}
-
+        this.state = {loading:true, listBtnEvent:[], dopParametr:[]}
+        this.resBTN = []
         this.dateMonthNode = ""
     }
 
@@ -48,6 +51,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
         let dateFull = splitDate[0]
 
 
+        
 
 
         const infoTurnOnEvent = {
@@ -57,13 +61,22 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
             "turnon_month":dateMonth,
             "turnon_day":dateDay,
             "turnon_year":dateYear,
-            "turnon_date_all":dateFull
+            "turnon_date_all":dateFull,
+            "turnon_btn_event":this.handlerImplode(trNode.querySelector(".btnEvent").selectedOptions)
         }
-        console.log(infoTurnOnEvent)
+        // console.log(this.handlerImplode(trNode.querySelector(".btnEvent").selectedOptions)) 
+        // console.log(this.handlerImplode(trNode.querySelector(".btnEvent").selectedOptions))
         this.fetchRequestTurnEvent(infoTurnOnEvent)
+    }
 
 
-
+    handlerImplode(data:any){
+        //console.log(data)
+        this.resBTN = []
+        for(let i=0; i<data.length; i++){
+            this.resBTN.push(data[i].value)
+        }
+        return this.resBTN.join(",")
     }
 
     handlePhone(data:any){
@@ -165,9 +178,29 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
         apiObject.fethJSONget()
     }
 
+    /* события кнопок */
+    fetchDataBTNEvent=()=>{
+        let urlString = "http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=getBtnEvent"
+        let apiObject = new ApiRequest(urlString, "",(data:any)=>{
+            this.setState({listBtnEvent:data})
+        })
+        apiObject.fethJSON()
+    }
+
+   
+    /* события кнопок */
+
     componentDidMount(){
         this.setState({loading:false})
+        this.fetchDataBTNEvent()
     }
+
+    handlerBTN(e:any){
+        this.setState({dopParametr:e})
+       
+    }
+
+
 
 
        render(){
@@ -204,7 +237,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
                             <td><span className="material-icons iconevent list_build_delete" onClick={(e)=>this.deleteEvent(e)}>delete_forever</span></td>
                             <td><span className={v.turnon_is == 1 ? "material-icons iconevent list_build_production isTurnTrue" : "material-icons iconevent list_build_production isTurnFalse"} onClick={(e)=>this.productionEvent(e)}>thumb_up</span></td>
                             <td><span className="material-icons  list_build_production iconevent is_phone_api" onClick={(e)=>this.handlePhone(e)}>phone_iphone</span></td>
-                            <td><Multiselectbtn /></td> 
+                            <td className="list_build_production"><Multiselectbtn listA={this.state.listBtnEvent} /></td> 
                             </tr>
                        )}
                        {this.props.list.length < 1 ? "Данных нет" : ""}
@@ -212,7 +245,7 @@ export default class RenderListEvent extends React.Component<renderListEventINTE
                        </tbody>
                        </table>
                       <div>
-                      <Pagination listPage={this.props.list} />
+                      
                       </div>
                    </div>
                         

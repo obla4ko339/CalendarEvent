@@ -2,55 +2,50 @@ import React from 'react';
 import ApiRequest from '../apiRequest'
 
 
+interface pBtnSelect{
+    listA:[]
+}
+
 
 interface sBtnSelect{
     list:[]
 }
 
+interface btnEvent{
+    btn_ID:number,
+    btn_title:string,
+    btn_alias:string,
+    btn_default:string
+}
 
 
-export default class Multiselectbtn extends React.Component<{},sBtnSelect>{
+
+
+export default class Multiselectbtn extends React.Component<pBtnSelect,sBtnSelect>{
 
     listData:[]
 
     constructor(props:any){
         super(props)
         this.listData = []
-        this.fetchData()
+        this.state = {list:[]}
+        
     }
 
-    componentWillMount(){
-        console.log("componentWillMount")
-    }
+   
 
-
-    //request get all btn
-
-    fetchData=()=>{
-        let urlString = "http://event.kultura-to.ru/wp-content/plugins/hach-tag-event/api/request-data.php?getData=getBtnEvent"
-        let apiObject = new ApiRequest(urlString, "",(data:any)=>{
-            // this.resultData(data)
-            this.listData = data
-        })
-        apiObject.fethJSON()
-    }
-
-    resultData(data:any):Array<any>{
-        this.listData = data 
-        return data
-    }
+   
+  
 
 
     render(){
-
-        console.log(this.listData)
         return(
             <div>
-                <select name="" id="">
-                    <option value=""></option>
+                <select multiple name="btnEvent[]" id="btnEvent" defaultValue="1" className="btnEvent" >
+                    
                     {
-                        this.listData.map((item, index)=>(
-                            <option value="">{index}</option>
+                        this.props.listA.map((item:btnEvent, index)=>(
+                            <option value={item.btn_ID}>{item.btn_title}</option>
                         ))
                     }
                 </select>
